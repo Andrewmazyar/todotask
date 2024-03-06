@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  psql:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_ROOT_PASSWORD=root
+    ports:
+      - '5432:5432'
+    volumes:
+      - db:/var/lib/postgres
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - mynet
+  web:
+    image: development
+    build:
+      context: .
+    ports:
+      - '8080:8080'
+    networks:
+      - mynet
+    depends_on:
+      - psql
+    environment:
+      - DB_URL=psql:5432/postgres
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+networks:
+  mynet:
+    driver: bridge
+volumes:
+  db:
