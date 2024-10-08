@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,27 +50,25 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.httpBasic().disable()
-                .csrf().disable()
-                .cors().disable()
-                .sessionManagement()
-                .sessionCreationPolicy(STATELESS)
-                .and()
-                .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.POST,"/register").permitAll()
-                .requestMatchers(HttpMethod.POST,"/login").permitAll()
-                .requestMatchers(
-                        "/v3/api-docs/**",
-                        "/swagger-resources/**",
-                        "/swagger-ui.html"
-                ).permitAll()
-                .anyRequest().fullyAuthenticated()
-                .and()
+        http.httpBasic(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
+                .sessionManagement(sm -> sm.sessionCreationPolicy(STATELESS))
+                .authorizeHttpRequests(request ->
+                        request.requestMatchers(HttpMethod.POST,"/register").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/register").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/login").permitAll()
+                                .requestMatchers(
+                                        "/v3/api-docs/**",
+                                        "/swagger-resources/**",
+                                        "/swagger-ui.html"
+                                ).permitAll()
+                                .anyRequest().fullyAuthenticated()
+                )
                 .apply(new JwtConfig(jwtTokenProvider))
-                .and()
-                .headers()
-                .frameOptions()
-                .disable();
+                .configure(http
+                        .headers(head -> head
+                                .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)));
         return http.build();
     }
 }
