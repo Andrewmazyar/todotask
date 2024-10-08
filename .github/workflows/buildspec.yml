@@ -50,6 +50,6 @@ jobs:
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: task-tool-service
-          cluster: ${{ env.ECS_CLUSTER }}
+          cluster: task-tool
           wait-for-service-stability: true
           
