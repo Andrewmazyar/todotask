@@ -14,7 +14,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'openjdk'
+          distribution: 'alpine'
           java-version: '17'
       - name: build project
         run: mvn clean install -DskipTests
