@@ -91,6 +91,7 @@
     "FARGATE"
   ],
   "requiresCompatibilities": [
+    "EC2",
     "FARGATE"
   ],
   "cpu": "256",
