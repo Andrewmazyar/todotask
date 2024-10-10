@@ -22,11 +22,11 @@
         },
         {
           "name": "DB_URL",
-          "value": "psql:5432/postgres"
+          "value": "psql.c1wmma2wazpu.eu-north-1.rds.amazonaws.com:5432/postgres"
         },
         {
           "name": "DB_PASSWORD",
-          "value": "Carlsberg_1992"
+          "value": "root"
         }
       ],
       "mountPoints": [],
