@@ -1,9 +1,9 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:eu-north-1:512269564608:task-definition/task-tool:2",
+  "taskDefinitionArn": "arn:aws:ecs:eu-north-1:512269564608:task-definition/task-tool:4",
   "containerDefinitions": [
     {
       "name": "task-tool",
-      "image": "512269564608.dkr.ecr.eu-north-1.amazonaws.com/todo-task",
+      "image": "512269564608.dkr.ecr.eu-north-1.amazonaws.com/todo-task:3bc5651f4715180d1f0e75ed8c370e92ba3ca86c",
       "cpu": 0,
       "portMappings": [
         {
@@ -15,11 +15,22 @@
         }
       ],
       "essential": true,
-      "environment": [],
-      "environmentFiles": [],
+      "environment": [
+        {
+          "name": "DB_USERNAME",
+          "value": "root"
+        },
+        {
+          "name": "DB_URL",
+          "value": "psql:5432/postgres"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "value": "Carlsberg_1992"
+        }
+      ],
       "mountPoints": [],
       "volumesFrom": [],
-      "ulimits": [],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
@@ -39,7 +50,7 @@
   "taskRoleArn": "arn:aws:iam::512269564608:role/ecsTaskExecutionRole",
   "executionRoleArn": "arn:aws:iam::512269564608:role/ecsTaskExecutionRole",
   "networkMode": "awsvpc",
-  "revision": 2,
+  "revision": 4,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -88,7 +99,7 @@
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
   },
-  "registeredAt": "2024-10-07T19:51:04.965Z",
+  "registeredAt": "2024-10-10T10:22:31.802Z",
   "registeredBy": "arn:aws:iam::512269564608:root",
   "tags": []
 }
