@@ -18,11 +18,11 @@
       "environment": [
         {
           "name": "DB_USERNAME",
-          "value": "root"
+          "value": "postgres"
         },
         {
           "name": "DB_URL",
-          "value": "psql.c1wmma2wazpu.eu-north-1.rds.amazonaws.com:5432/postgres"
+          "value": "database-1.c1wmma2wazpu.eu-north-1.rds.amazonaws.com:5432/postgres"
         },
         {
           "name": "DB_PASSWORD",
