@@ -1,9 +1,9 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:eu-north-1:512269564608:task-definition/task-tool:4",
+  "taskDefinitionArn": "arn:aws:ecs:eu-north-1:512269564608:task-definition/task-tool:9",
   "containerDefinitions": [
     {
       "name": "task-tool",
-      "image": "512269564608.dkr.ecr.eu-north-1.amazonaws.com/todo-task:3bc5651f4715180d1f0e75ed8c370e92ba3ca86c",
+      "image": "512269564608.dkr.ecr.eu-north-1.amazonaws.com/todo-task:60995515394493c34c7b036b5553ed123c462e93",
       "cpu": 0,
       "portMappings": [
         {
@@ -18,11 +18,11 @@
       "environment": [
         {
           "name": "DB_USERNAME",
-          "value": "postgres"
+          "value": "root"
         },
         {
           "name": "DB_URL",
-          "value": "database-1.c1wmma2wazpu.eu-north-1.rds.amazonaws.com:5432/postgres"
+          "value": "psql.c1wmma2wazpu.eu-north-1.rds.amazonaws.com:5432/postgres"
         },
         {
           "name": "DB_PASSWORD",
@@ -50,7 +50,7 @@
   "taskRoleArn": "arn:aws:iam::512269564608:role/ecsTaskExecutionRole",
   "executionRoleArn": "arn:aws:iam::512269564608:role/ecsTaskExecutionRole",
   "networkMode": "awsvpc",
-  "revision": 4,
+  "revision": 9,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -100,7 +100,7 @@
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
   },
-  "registeredAt": "2024-10-10T10:22:31.802Z",
+  "registeredAt": "2024-10-10T14:20:52.015Z",
   "registeredBy": "arn:aws:iam::512269564608:root",
   "tags": []
 }
