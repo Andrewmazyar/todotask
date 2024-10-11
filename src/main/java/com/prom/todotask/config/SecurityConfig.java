@@ -56,7 +56,6 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(STATELESS))
                 .authorizeHttpRequests(request ->
                         request.requestMatchers(HttpMethod.POST,"/register").permitAll()
-                                .requestMatchers(HttpMethod.POST,"/register").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/login").permitAll()
                                 .requestMatchers(
                                         "/v3/api-docs/**",
