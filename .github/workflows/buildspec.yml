@@ -29,6 +29,9 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
         with:
           mask-password: 'true'
+      - name: Write task definition from secret
+        run: |
+            echo "${{ secrets.TASK_TOOL_JSON }}" > task-tool.json
       - name: build, tag and push image to amazon ECR
         id: build-image
         env:
@@ -50,7 +53,7 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: task-tool-service
+          service: task-tool-service-v3
           cluster: task-tool
           wait-for-service-stability: true
           
