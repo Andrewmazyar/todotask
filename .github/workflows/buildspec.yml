@@ -6,50 +6,55 @@ on:
 
 jobs:
   build:
+    name: Java Scan
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
-
-      - name: Set up Java
+      - name: Setup Java
         uses: actions/setup-java@v3
         with:
           distribution: 'adopt'
           java-version: '17'
-
-      - name: Log in to Amazon ECR
-        id: ecr-login
+      - name: build project
+        run: mvn clean install -DskipTests
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'eu-north-1'
+      - name: login to amazon ecr
+        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-        env:
-          AWS_REGION: eu-north-1  # Set the AWS region here
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Using the secret
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Using the secret
-
-      - name: Build and push Docker image
-        id: build-image
+        with:
+          mask-password: 'true'
+      - name: Write task definition from secret
         run: |
-          IMAGE_TAG=$(git rev-parse --short HEAD)
-          docker build -t 512269564608.dkr.ecr.eu-north-1.amazonaws.com/todo-task:${IMAGE_TAG} .
-          docker push 512269564608.dkr.ecr.eu-north-1.amazonaws.com/todo-task:${IMAGE_TAG}
+            echo "${{ secrets.TASK_TOOL_JSON }}" > task-tool.json
+        shell: bash
+      - name: build, tag and push image to amazon ECR
+        id: build-image
         env:
-          AWS_REGION: eu-north-1  # Set the AWS region here
-
-      - name: Update ECS task definition
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+          ECR_REPOSITORY: todo-task
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+      - name: fill in the new image id in the amazon ecs task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-tool.json
           container-name: task-tool
-          image: 512269564608.dkr.ecr.eu-north-1.amazonaws.com/todo-task:${{ steps.build-image.outputs.image }}
-        env:
-          AWS_REGION: eu-north-1  # Set the AWS region here
-
-      - name: Deploy to ECS
+          image: ${{ steps.build-image.outputs.image }}
+      - name: deploy amazon ecs task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: task-tool-service-v3
           cluster: task-tool
           wait-for-service-stability: true
-        env:
-          AWS_REGION: eu-north-1  # Set the AWS region here
+
