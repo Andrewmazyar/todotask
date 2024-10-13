@@ -22,8 +22,8 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
         env:
           AWS_REGION: eu-north-1  # Set the AWS region here
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Using the secret
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Using the secret
 
       - name: Build and push Docker image
         id: build-image
@@ -32,9 +32,7 @@ jobs:
           docker build -t 512269564608.dkr.ecr.eu-north-1.amazonaws.com/todo-task:${IMAGE_TAG} .
           docker push 512269564608.dkr.ecr.eu-north-1.amazonaws.com/todo-task:${IMAGE_TAG}
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: eu-north-1  # Add this line to specify the AWS region
+          AWS_REGION: eu-north-1  # Set the AWS region here
 
       - name: Update ECS task definition
         id: task-def
