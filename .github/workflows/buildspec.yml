@@ -18,7 +18,10 @@ jobs:
           java-version: '17'
 
       - name: Log in to Amazon ECR
+        id: ecr-login
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          region: eu-north-1  # Specify your region here
 
       - name: Build and push Docker image
         id: build-image
@@ -29,7 +32,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS-REGION: 'eu-north-1'
+          AWS_REGION: eu-north-1  # Add this line to specify the AWS region
 
       - name: Update ECS task definition
         id: task-def
@@ -38,6 +41,7 @@ jobs:
           task-definition: task-tool.json
           container-name: task-tool
           image: 512269564608.dkr.ecr.eu-north-1.amazonaws.com/todo-task:${{ steps.build-image.outputs.image }}
+          region: eu-north-1  # Specify your region here
 
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
@@ -46,3 +50,4 @@ jobs:
           service: task-tool-service-v3
           cluster: task-tool
           wait-for-service-stability: true
+          region: eu-north-1  # Specify your region here
