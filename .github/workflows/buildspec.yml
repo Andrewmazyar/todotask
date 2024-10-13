@@ -32,6 +32,7 @@ jobs:
       - name: Write task definition from secret
         run: |
             echo "${{ secrets.TASK_TOOL_JSON }}" > task-tool.json
+        shell: bash
       - name: build, tag and push image to amazon ECR
         id: build-image
         env:
@@ -46,7 +47,7 @@ jobs:
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ${{ github.workspace }}/task-tool.json
+          task-definition: task-tool.json
           container-name: task-tool
           image: ${{ steps.build-image.outputs.image }}
       - name: deploy amazon ecs task definition
