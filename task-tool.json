@@ -90,7 +90,8 @@
     "FARGATE"
   ],
   "requiresCompatibilities": [
-    "FARGATE"
+    "FARGATE",
+    "EC2"
   ],
   "cpu": "512",
   "memory": "1024",
