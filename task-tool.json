@@ -1,13 +1,13 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:eu-north-1:512269564608:task-definition/one-more:7",
+  "taskDefinitionArn": "arn:aws:ecs:eu-west-1:512269564608:task-definition/spring:1",
   "containerDefinitions": [
     {
-      "name": "one-more",
-      "image": "512269564608.dkr.ecr.eu-north-1.amazonaws.com/todo-task:95a78954cc189773523a164044c064d04956dded",
+      "name": "task-definition-spring",
+      "image": "512269564608.dkr.ecr.eu-west-1.amazonaws.com/spring/todo",
       "cpu": 0,
       "portMappings": [
         {
-          "name": "one-more-80-tcp",
+          "name": "task-definition-spring-80-tcp",
           "containerPort": 80,
           "hostPort": 80,
           "protocol": "tcp",
@@ -29,27 +29,30 @@
           "value": "Very_Secret_Password"
         }
       ],
+      "environmentFiles": [],
       "mountPoints": [],
       "volumesFrom": [],
+      "ulimits": [],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/one-more",
+          "awslogs-group": "/ecs/spring",
           "mode": "non-blocking",
           "awslogs-create-group": "true",
           "max-buffer-size": "25m",
-          "awslogs-region": "eu-north-1",
+          "awslogs-region": "eu-west-1",
           "awslogs-stream-prefix": "ecs"
-        }
+        },
+        "secretOptions": []
       },
       "systemControls": []
     }
   ],
-  "family": "one-more",
+  "family": "spring",
   "taskRoleArn": "arn:aws:iam::512269564608:role/ecsTaskExecutionRole",
   "executionRoleArn": "arn:aws:iam::512269564608:role/ecsTaskExecutionRole",
   "networkMode": "awsvpc",
-  "revision": 7,
+  "revision": 1,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -99,7 +102,7 @@
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
   },
-  "registeredAt": "2024-11-06T13:36:17.143Z",
+  "registeredAt": "2024-11-08T21:52:44.498Z",
   "registeredBy": "arn:aws:iam::512269564608:root",
   "tags": []
 }

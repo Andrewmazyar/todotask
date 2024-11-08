@@ -23,7 +23,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: 'eu-north-1'
+          aws-region: 'eu-west-1'
       - name: login to amazon ecr
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
@@ -39,7 +39,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
-          ECR_REPOSITORY: todo-task
+          ECR_REPOSITORY: spring/todo
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
@@ -55,7 +55,7 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: one-more
-          cluster: one-more
+          service: spring
+          cluster: spring
           wait-for-service-stability: true
 
